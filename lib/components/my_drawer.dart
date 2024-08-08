@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:twitter_clone/components/my_drawer_tile.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -18,12 +19,20 @@ class MyDrawer extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primary,
                 ),
               ),
-
-              MyDrawerTile()
-
               Divider(
-                indent:25,
-                endIndent:25,color: Theme.of(context).colorScheme.secondary)
+                indent: 25,
+                endIndent: 25,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              MyDrawerTile(
+                title: "H O M E",
+                icon: Icons.home,
+                onTap: (){},
+              ),
+              MyDrawerTile(
+                title:
+              ),
+              MyDrawerTile(),
             ],
           ),
         ));
