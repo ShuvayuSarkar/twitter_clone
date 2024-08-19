@@ -2,18 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:twitter_clone/components/my_Button.dart';
 import 'package:twitter_clone/components/my_text_field.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+/*REGISTER PAGE
+
+ON THIS PAGE NEW USER CAN create an account
+*/
+
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   //text field controller
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController pwCOntroller = TextEditingController();
-  final TextEditingController controller = TextEditingController();
+  final TextEditingController pwController = TextEditingController();
+  final TextEditingController confirmPwcontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +42,9 @@ class _LoginPageState extends State<LoginPage> {
 
                   const SizedBox(height: 25),
 
-                  //welcome back message
+                  //create an account message
                   Text(
-                    "Welcome back, you\'ve been missed!",
+                    "Create an account for you",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       fontSize: 16,
@@ -47,10 +53,19 @@ class _LoginPageState extends State<LoginPage> {
 
                   const SizedBox(height: 25),
 
+                  //name textfield
+                  MyTextField(
+                    controller: nameController,
+                    hintText: "Enter name",
+                    obscureText: false,
+                  ),
+
+                  const SizedBox(height: 10),
+
                   //email textfield
                   MyTextField(
                     controller: emailController,
-                    hintText: "Enter email..",
+                    hintText: "Enter name",
                     obscureText: false,
                   ),
 
@@ -58,33 +73,29 @@ class _LoginPageState extends State<LoginPage> {
 
                   //password textfield
                   MyTextField(
-                    controller: pwCOntroller,
-                    hintText: "Enter Password",
+                    controller: pwController,
+                    hintText: "Enter password",
                     obscureText: false,
                   ),
 
                   const SizedBox(height: 10),
 
-                  //forgot password
-
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text("Forgot Password",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                        )),
+                  //confirm Password textfield
+                  MyTextField(
+                    controller: pwController,
+                    hintText: "confirm password",
+                    obscureText: false,
                   ),
 
                   const SizedBox(height: 25),
 
-                  //sign in button
+                  //sign up button
                   MyButton(
-                    text: "Login",
+                    text: "Register",
                     onTap: () {},
                   ),
 
-                  //not a member, sign up now,
+                  //already a member? login here.
                   const SizedBox(height: 25),
 
                   Row(
@@ -102,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                       GestureDetector(
                         onTap: () {},
                         child: Text(
-                          "Register now",
+                          "login now",
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.bold,
