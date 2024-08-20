@@ -8,7 +8,8 @@ ON THIS PAGE NEW USER CAN create an account
 */
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  final void Function()? onTap;
+  const RegisterPage({super.key, required this.onTap});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -111,7 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                       //user can tap on this to go to register page
                       GestureDetector(
-                        onTap: () {},
+                        onTap: widget.onTap,
                         child: Text(
                           "login now",
                           style: TextStyle(

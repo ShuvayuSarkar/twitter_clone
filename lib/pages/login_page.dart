@@ -3,7 +3,8 @@ import 'package:twitter_clone/components/my_Button.dart';
 import 'package:twitter_clone/components/my_text_field.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final void Function()? onTap;
+  const LoginPage({super.key, required this.onTap});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -100,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
 
                       //user can tap on this to go to register page
                       GestureDetector(
-                        onTap: () {},
+                        onTap: widget.onTap,
                         child: Text(
                           "Register now",
                           style: TextStyle(
