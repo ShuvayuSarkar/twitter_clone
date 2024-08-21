@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/components/my_Button.dart';
 import 'package:twitter_clone/components/my_text_field.dart';
+import 'package:twitter_clone/services/auth/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   final void Function()? onTap;
@@ -11,6 +12,18 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  //access auth service
+  final _auth = AuthService();
+
+  //login method
+  void login() async {
+    try {
+      await _auth.loginEmailPassword(emailController.text, pwCOntroller.text);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   //text field controller
   final TextEditingController emailController = TextEditingController();
   final TextEditingController pwCOntroller = TextEditingController();
@@ -82,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                   //sign in button
                   MyButton(
                     text: "Login",
-                    onTap: () {},
+                    onTap: login,
                   ),
 
                   //not a member, sign up now,

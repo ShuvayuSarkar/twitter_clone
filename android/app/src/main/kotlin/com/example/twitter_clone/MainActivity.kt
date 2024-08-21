@@ -1,4 +1,4 @@
-package com.example.twitter_clone
+package app.shuvayu.twitter
 
 import io.flutter.embedding.android.FlutterActivity
 
