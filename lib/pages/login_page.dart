@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/components/my_Button.dart';
+import 'package:twitter_clone/components/my_loading_circle.dart';
 import 'package:twitter_clone/components/my_text_field.dart';
 import 'package:twitter_clone/services/auth/auth_service.dart';
 
@@ -15,18 +16,66 @@ class _LoginPageState extends State<LoginPage> {
   //access auth service
   final _auth = AuthService();
 
+  // Function to show error message
+  void showErrorMessage(BuildContext context, String message) {
+    // Show a dialog with the error message
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                // Close the dialog
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   //login method
   void login() async {
+    //show loading circle
+    showLoadingCircle(context);
+
     try {
-      await _auth.loginEmailPassword(emailController.text, pwCOntroller.text);
+      //trying to login
+      await _auth.loginEmailPassword(emailController.text, pwController.text);
+
+      //finished loading circle
+      if (mounted) hideLoadingCircle(context);
     } catch (e) {
-      print(e.toString());
+      //finished loading...
+      if (mounted) hideLoadingCircle(context);
+
+      //let user know there was an error
+      if (e.toString().contains('ERROR_USER_NOT_FOUND')) {
+        // User not found
+        showErrorMessage(context, 'User not found. Please register first.');
+      } else if (e.toString().contains('ERROR_WRONG_PASSWORD')) {
+        // Wrong password
+        showErrorMessage(context, 'Incorrect password. Please try again.');
+      } else if (e.toString().contains('ERROR_INVALID_EMAIL')) {
+        // Invalid email
+        showErrorMessage(context,
+            'Invalid email address. Please enter a valid email address.');
+      } else {
+        // Other error
+        showErrorMessage(
+            context, 'Credentials Do not match!. Please try again later.');
+      }
     }
   }
 
   //text field controller
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController pwCOntroller = TextEditingController();
+  final TextEditingController pwController = TextEditingController();
   final TextEditingController controller = TextEditingController();
 
   @override
@@ -72,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   //password textfield
                   MyTextField(
-                    controller: pwCOntroller,
+                    controller: pwController,
                     hintText: "Enter Password",
                     obscureText: false,
                   ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/components/my_Button.dart';
+import 'package:twitter_clone/components/my_loading_circle.dart';
 import 'package:twitter_clone/components/my_text_field.dart';
+import 'package:twitter_clone/services/auth/auth_service.dart';
 
 /*REGISTER PAGE
 
@@ -16,6 +18,58 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  //access auth service
+  final _auth = AuthService();
+
+  //register button tapped
+  void register() async {
+    //passwords match then create user
+
+    if (pwController.text == confirmPwcontroller.text) {
+      //show loading circle
+      showLoadingCircle(context);
+
+      //attempt to register new user
+      try {
+        //trying to register
+        await _auth.registerEmailPassword(
+          emailController.text,
+          pwController.text,
+        );
+
+        //finished loading
+        if (mounted) hideLoadingCircle(context);
+      }
+
+      //catch any errors
+      catch (e) {
+        //finished loading
+        if (mounted) hideLoadingCircle(context);
+
+        //let user know of the error
+
+        if (mounted) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(e.toString()),
+            ),
+          );
+        }
+      }
+    }
+
+    //passwords dont match then show error
+    else {
+      showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+          title: Text("Passwords do not match"),
+        ),
+      );
+    }
+  }
+
   //text field controller
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -66,7 +120,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   //email textfield
                   MyTextField(
                     controller: emailController,
-                    hintText: "Enter name",
+                    hintText: "Enter your email",
                     obscureText: false,
                   ),
 
@@ -83,7 +137,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   //confirm Password textfield
                   MyTextField(
-                    controller: pwController,
+                    controller: confirmPwcontroller,
                     hintText: "confirm password",
                     obscureText: false,
                   ),
@@ -93,7 +147,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   //sign up button
                   MyButton(
                     text: "Register",
-                    onTap: () {},
+                    onTap: register,
                   ),
 
                   //already a member? login here.
