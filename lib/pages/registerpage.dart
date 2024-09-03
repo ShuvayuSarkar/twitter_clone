@@ -3,6 +3,7 @@ import 'package:twitter_clone/components/my_Button.dart';
 import 'package:twitter_clone/components/my_loading_circle.dart';
 import 'package:twitter_clone/components/my_text_field.dart';
 import 'package:twitter_clone/services/auth/auth_service.dart';
+import 'package:twitter_clone/services/auth/database/database_service.dart';
 
 /*REGISTER PAGE
 
@@ -18,8 +19,9 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  //access auth service
+  //access auth and db services
   final _auth = AuthService();
+  final _db = DatabaseService();
 
   //register button tapped
   void register() async {
@@ -39,6 +41,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
         //finished loading
         if (mounted) hideLoadingCircle(context);
+
+        //once registered , create and save userprofile in database
+
+        await _db.saveUserInfoInFirebase(
+            name: emailController.text, email: pwController.text);
+
+        //btw
       }
 
       //catch any errors
