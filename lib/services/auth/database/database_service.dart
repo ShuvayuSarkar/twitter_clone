@@ -15,13 +15,14 @@ handles all the data from and to firebase
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:twitter_clone/models/user.dart';
+import 'package:twitter_clone/services/auth/auth_service.dart';
 
 class DatabaseService {
   final _db = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
 
   //user profile
-  // when a new user registers, we create an account dor them, but lets store their details in database to display on their profile page
+  // when a new user registers, we create an account for them, but lets store their details in database to display on their profile page
 
   //save user info
   Future<void> saveUserInfoInFirebase(
@@ -36,8 +37,8 @@ class DatabaseService {
     UserProfile user = UserProfile(
       uid: uid,
       name: name,
-      username: username,
       email: email,
+      username: username,
       bio: '',
     );
 
@@ -49,15 +50,29 @@ class DatabaseService {
   }
 
   //get user info
-  Future<UserProfile?> getUserFromFirebase(String Uid) async {
+  Future<UserProfile?> getUserFromFirebase(String uid) async {
     try {
       //retreive userinfo doc from firebase
-      DocumentSnapshot userDoc = await _db.collection('Users').doc(Uid).get();
+      DocumentSnapshot userDoc = await _db.collection("Users").doc(uid).get();
 
       //convert doc to user profile
       return UserProfile.fromDocument(userDoc);
     } catch (e) {
+      print(e);
       return null;
+    }
+  }
+
+  //update user bio
+  Future<void> updateUserBioInFirebase(String bio) async {
+    //get current user id
+    String uid = AuthService().getCurrentUid();
+
+    //attempt to update in firebase
+    try {
+      await _db.collection('Users').doc(uid).update({'bio': bio});
+    } catch (e) {
+      print(e);
     }
   }
 }

@@ -45,7 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
         //once registered , create and save userprofile in database
 
         await _db.saveUserInfoInFirebase(
-            name: emailController.text, email: pwController.text);
+            name: nameController.text, email: emailController.text);
 
         //btw
       }

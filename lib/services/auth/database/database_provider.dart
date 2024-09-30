@@ -21,4 +21,7 @@ class DatbaseProvider extends ChangeNotifier {
 
   //get user profile given uid
   Future<UserProfile?> userProfile(String uid) => _db.getUserFromFirebase(uid);
+
+  //update user bio
+  Future<void> updateBio(String bio) => _db.updateUserBioInFirebase(bio);
 }
