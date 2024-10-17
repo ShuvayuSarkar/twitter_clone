@@ -15,6 +15,7 @@ handles all the data from and to firebase
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:twitter_clone/models/user.dart';
+import 'package:twitter_clone/models/post.dart'; // Add this import
 import 'package:twitter_clone/services/auth/auth_service.dart';
 
 class DatabaseService {
@@ -75,4 +76,42 @@ class DatabaseService {
       print(e);
     }
   }
+
+  //post message
+  Future<void> postMessageInFirebase(String message) async {
+    try {
+      //get current uid
+      String uid = _auth.currentUser!.uid;
+
+      //use this uid to get user's profile
+      UserProfile? user = await getUserFromFirebase(uid);
+      //create a new post
+      Post newPost = Post(
+        id: '',
+        uid: uid,
+        name: user!.name,
+        username: user.username,
+        message: message,
+        timestamp: Timestamp.now(),
+        likeCount: 0,
+        likedBy: [],
+      );
+
+      //convert post object -> map
+      Map<String, dynamic> newPostMap = newPost.toMap();
+
+      //add to firebase
+      await _db.collection("Posts").add(newPostMap);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //post a message
+
+  //delete a post
+
+  //get indivi
+
+  //get individual
 }
